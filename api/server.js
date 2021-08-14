@@ -1,15 +1,24 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const userRoute = require('./routes/userRoutes');
 
 dotenv.config();
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// CRUD
-// GET - Gets Data
-// POST - Uploads Data
-// PATCH - Updates Data
-// DELETE - Removes Data
+// Setting up MongodAtlas
+mongoose.connect(process.env.MONGO_URL2, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+})
+.then((result) => console.log('DB fired...'))
+.catch((err) => console.log(err));
+
+// Bringing in the Router logic
+app.use('/api/user', userRoute);
 
 app.get('/', (req, res) => {
   return res.status(200).json({
